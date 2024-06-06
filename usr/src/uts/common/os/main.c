@@ -663,12 +663,6 @@ main(void)
 	/*
 	 * Create system threads (threads are associated with p0)
 	 */
-
-	/* create module uninstall daemon */
-	/* BugID 1132273. If swapping over NFS need a bigger stack */
-	(void) thread_create(NULL, 0, (void (*)())mod_uninstall_daemon,
-	    NULL, 0, &p0, TS_RUN, minclsyspri);
-
 	(void) thread_create(NULL, 0, seg_pasync_thread,
 	    NULL, 0, &p0, TS_RUN, minclsyspri);
 

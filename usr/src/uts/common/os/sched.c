@@ -380,10 +380,9 @@ top:
 
 unload:
 	/*
-	 * Unload all unloadable modules, free all other memory
-	 * resources we can find, then look for a thread to hardswap.
+	 * Free all memory resources we can find, then look for a thread to
+	 * hardswap.
 	 */
-	modreap();
 	segkp_cache_free();
 
 	swapout_prp = NULL;

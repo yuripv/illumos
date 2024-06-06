@@ -582,8 +582,6 @@ extern int	mod_sysctl_type(int, int (*)(struct sysparam *, void *),
 extern void	mod_read_system_file(int);
 extern void	mod_release_stub(struct mod_stub_info *);
 extern void	mod_askparams(void);
-extern void	mod_uninstall_daemon(void);
-extern void	modreap(void);
 extern modctl_t *mod_hold_by_id(modid_t);
 extern modctl_t *mod_hold_by_name(const char *);
 extern void	mod_release_mod(modctl_t *);

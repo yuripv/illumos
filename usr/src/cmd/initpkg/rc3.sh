@@ -87,10 +87,3 @@ if [ -d /etc/rc3.d ]; then
 		fi
 	done
 fi
-
-if smf_is_globalzone; then
-	# Unload all the loadable modules brought in during boot
-	# Delay a few seconds to allow dtlogin to open console first.
-
-	(sleep 5; modunload -i 0) & >/dev/null 2>&1
-fi

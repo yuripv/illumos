@@ -120,13 +120,10 @@ struct loadmt {
 static void	modload_thread(struct loadmt *);
 
 kcondvar_t	mod_cv;
-kcondvar_t	mod_uninstall_cv;	/* Communication between swapper */
-					/* and the uninstall daemon. */
 kmutex_t	mod_lock;		/* protects &modules insert linkage, */
 					/* mod_busy, mod_want, and mod_ref. */
 					/* blocking operations while holding */
 					/* mod_lock should be avoided */
-kmutex_t	mod_uninstall_lock;	/* protects mod_uninstall_cv */
 kthread_id_t	mod_aul_thread;
 
 int		modunload_wait;
@@ -141,7 +138,6 @@ int	moddebug = 0x0;		/* debug flags for module writers */
 int	swaploaded;		/* set after swap driver and fs are loaded */
 int	bop_io_quiesced = 0;	/* set when BOP I/O can no longer be used */
 int	last_module_id;
-clock_t	mod_uninstall_interval = 0;
 int	mod_uninstall_pass_max = 6;
 int	mod_uninstall_ref_zero;	/* # modules that went mod_ref == 0 */
 int	mod_uninstall_pass_exc;	/* mod_uninstall_all left new stuff */
@@ -392,21 +388,11 @@ modctl_modunload(modid_t id)
 {
 	int rval = 0;
 
-	if (id == 0) {
-#ifdef DEBUG
-		/*
-		 * Turn on mod_uninstall_daemon
-		 */
-		if (mod_uninstall_interval == 0) {
-			mod_uninstall_interval = 60;
-			modreap();
-			return (rval);
-		}
-#endif
+	if (id == 0)
 		mod_uninstall_all();
-	} else {
+	else
 		rval = modunload(id);
-	}
+
 	return (rval);
 }
 
@@ -3914,63 +3900,6 @@ modunload_end()
 	if ((modunload_active_count == 0) && modunload_wait)
 		cv_broadcast(&modunload_wait_cv);
 	mutex_exit(&modunload_wait_mutex);
-}
-
-void
-mod_uninstall_daemon(void)
-{
-	callb_cpr_t	cprinfo;
-	clock_t		ticks;
-
-	mod_aul_thread = curthread;
-
-	CALLB_CPR_INIT(&cprinfo, &mod_uninstall_lock, callb_generic_cpr, "mud");
-	for (;;) {
-		mutex_enter(&mod_uninstall_lock);
-		CALLB_CPR_SAFE_BEGIN(&cprinfo);
-		/*
-		 * In DEBUG kernels, unheld drivers are uninstalled periodically
-		 * every mod_uninstall_interval seconds.  Periodic uninstall can
-		 * be disabled by setting mod_uninstall_interval to 0 which is
-		 * the default for a non-DEBUG kernel.
-		 */
-		if (mod_uninstall_interval) {
-			ticks = drv_usectohz(mod_uninstall_interval * 1000000);
-			(void) cv_reltimedwait(&mod_uninstall_cv,
-			    &mod_uninstall_lock, ticks, TR_CLOCK_TICK);
-		} else {
-			cv_wait(&mod_uninstall_cv, &mod_uninstall_lock);
-		}
-		/*
-		 * The whole daemon is safe for CPR except we don't want
-		 * the daemon to run if FREEZE is issued and this daemon
-		 * wakes up from the cv_wait above. In this case, it'll be
-		 * blocked in CALLB_CPR_SAFE_END until THAW is issued.
-		 *
-		 * The reason of calling CALLB_CPR_SAFE_BEGIN twice is that
-		 * mod_uninstall_lock is used to protect cprinfo and
-		 * CALLB_CPR_SAFE_BEGIN assumes that this lock is held when
-		 * called.
-		 */
-		CALLB_CPR_SAFE_END(&cprinfo, &mod_uninstall_lock);
-		CALLB_CPR_SAFE_BEGIN(&cprinfo);
-		mutex_exit(&mod_uninstall_lock);
-		if ((modunload_disable_count == 0) &&
-		    ((moddebug & MODDEBUG_NOAUTOUNLOAD) == 0)) {
-			mod_uninstall_all();
-		}
-	}
-}
-
-/*
- * Unload all uninstalled modules.
- */
-void
-modreap(void)
-{
-	mutex_enter(&mod_uninstall_lock);
-	cv_broadcast(&mod_uninstall_cv);
-	mutex_exit(&mod_uninstall_lock);
 }
 
 /*
