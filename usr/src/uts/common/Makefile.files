@@ -23,7 +23,7 @@
 # Copyright (c) 1991, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2011, 2014 by Delphix. All rights reserved.
 # Copyright (c) 2013 by Saso Kiselkov. All rights reserved.
-# Copyright 2018 Nexenta Systems, Inc.
+# Copyright 2024 Tintri by DDN, Inc. All rights reserved.
 # Copyright 2022 Garrett D'Amore
 # Copyright 2020 Joyent, Inc.
 # Copyright 2016 OmniTI Computer Consulting, Inc.  All rights reserved.
@@ -2347,3 +2347,6 @@ ENA_OBJS +=	ena.o ena_admin.o ena_dma.o ena_aenq.o ena_gld.o ena_hw.o \
 
 IGC_CORE_OBJS += igc_api.o igc_base.o igc_i225.o igc_mac.o igc_nvm.o igc_phy.o
 IGC_OBJS += $(IGC_CORE_OBJS) igc.o igc_osdep.o igc_gld.o igc_ring.o igc_stat.o
+
+# BNXT objects
+BNXT_OBJS=	bnxt.o bnxt_gld.o bnxt_hwrm.o bnxt_ring.o

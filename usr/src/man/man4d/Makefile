@@ -14,7 +14,7 @@
 # Copyright 2016 Garrett D'Amore <garrett@damore.org>
 # Copyright 2019 Joyent, Inc.
 # Copyright 2016 Hans Rosenfeld <rosenfeld@grumpf.hope-2000.org>
-# Copyright 2018 Nexenta Systems, Inc.
+# Copyright 2024 Tintri by DDN, Inc. All rights reserved.
 # Copyright 2023 Peter Tribble
 # Copyright 2024 Oxide Computer Company
 # Copyright 2023 RackTop Systems, Inc.
@@ -37,6 +37,7 @@ _MANFILES=	aac.4d		\
 		bge.4d		\
 		blkdev.4d	\
 		bnxe.4d		\
+		bnxt.4d		\
 		ccid.4d		\
 		chxge.4d	\
 		console.4d	\
