@@ -24,7 +24,7 @@
 # Copyright (c) 2014 by Delphix. All rights reserved.
 # Copyright 2019 Joyent, Inc.
 # Copyright 2022 Garrett D'Amore <garrett@damore.org>
-# Copyright 2018 Nexenta Systems, Inc.
+# Copyright 2024 Tintri by DDN, Inc. All rights reserved.
 # Copyright 2019 Peter Tribble.
 # Copyright 2024 Oxide Computer Company
 # Copyright 2023 Racktop Systems, Inc.
@@ -379,6 +379,7 @@ DRV_KMODS	+= atge
 DRV_KMODS	+= bfe
 DRV_KMODS	+= bnx
 DRV_KMODS	+= bnxe
+DRV_KMODS	+= bnxt
 DRV_KMODS	+= dmfe
 DRV_KMODS	+= e1000g
 DRV_KMODS	+= efe

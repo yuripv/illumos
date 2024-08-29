@@ -13,6 +13,7 @@
 # Copyright 2020 Joyent, Inc.
 # Copyright 2020 RackTop Systems, Inc.
 # Copyright 2021 Oxide Computer Company
+# Copyright 2024 Tintri by DDN, Inc. All rights reserved.
 #
 
 #
@@ -58,10 +59,19 @@ SYMBOL_SCOPE {
 	__x86_indirect_thunk_rdi	{ FLAGS = EXTERN };
 	__x86_indirect_thunk_rdx	{ FLAGS = EXTERN };
 	__x86_indirect_thunk_rsi	{ FLAGS = EXTERN };
+	_pagesize			{ FLAGS = EXTERN };
 	allocb				{ FLAGS = EXTERN };
 	assfail				{ FLAGS = EXTERN };
 	assfail3			{ FLAGS = EXTERN };
 	atomic_dec_32_nv		{ FLAGS = EXTERN };
+	avl_create			{ FLAGS = EXTERN };
+	avl_destroy			{ FLAGS = EXTERN };
+	avl_destroy_nodes		{ FLAGS = EXTERN };
+	avl_find			{ FLAGS = EXTERN };
+	avl_first			{ FLAGS = EXTERN };
+	avl_insert			{ FLAGS = EXTERN };
+	avl_remove			{ FLAGS = EXTERN };
+	avl_walk			{ FLAGS = EXTERN };
 	bcmp				{ FLAGS = EXTERN };
 	bcopy				{ FLAGS = EXTERN };
 	bzero				{ FLAGS = EXTERN };
@@ -155,6 +165,7 @@ SYMBOL_SCOPE {
 	dev_err				{ FLAGS = EXTERN };
 	drv_usectohz			{ FLAGS = EXTERN };
 	drv_usecwait			{ FLAGS = EXTERN };
+	esballoc_wait			{ FLAGS = EXTERN };
 	ffs				{ FLAGS = EXTERN };
 	fm_ena_generate			{ FLAGS = EXTERN };
 	freeb				{ FLAGS = EXTERN };
@@ -173,9 +184,12 @@ SYMBOL_SCOPE {
 	list_head			{ FLAGS = EXTERN };
 	list_insert_head		{ FLAGS = EXTERN };
 	list_insert_tail		{ FLAGS = EXTERN };
+	list_link_active		{ FLAGS = EXTERN };
 	list_next			{ FLAGS = EXTERN };
 	list_remove			{ FLAGS = EXTERN };
 	list_remove_head		{ FLAGS = EXTERN };
+	list_remove_tail		{ FLAGS = EXTERN };
+	memcmp				{ FLAGS = EXTERN };
 	memcpy				{ FLAGS = EXTERN };
 	memset				{ FLAGS = EXTERN };
 	miocack				{ FLAGS = EXTERN };

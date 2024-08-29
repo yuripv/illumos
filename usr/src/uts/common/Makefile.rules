@@ -24,7 +24,7 @@
 # Copyright 2022 Garrett D'Amore <garrett@damore.org>
 # Copyright 2013 Saso Kiselkov. All rights reserved.
 # Copyright 2019 Joyent, Inc.
-# Copyright 2018 Nexenta Systems, Inc.
+# Copyright 2024 Tintri by DDN, Inc. All rights reserved.
 # Copyright (c) 2017 by Delphix. All rights reserved.
 # Copyright 2024 Oxide Computer Company
 # Copyright 2023 RackTop Systems, Inc.
@@ -715,6 +715,10 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/bnxe/577xx/drivers/common/lm/l5/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/bnxe/577xx/drivers/common/lm/device/%.c
+	$(COMPILE.c) -o $@ $<
+	$(CTFCONVERT_O)
+
+$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/bnxt/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
