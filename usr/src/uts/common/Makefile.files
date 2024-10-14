@@ -2358,3 +2358,8 @@ KTEST_OBJS += ktest.o
 MAC_TEST_OBJS += mac_test.o
 KTEST_SELFTEST_OBJS += ktest_selftest.o
 STREAM_TEST_OBJS += stream_test.o
+
+NTB_OBJS=	ntb_transport.o name_to_ep.o
+NTB_SVC_OBJS=	ntb_svc.o
+PEXNTB_OBJS=	pexntb.o #pexntb_cfg.o pexntb_intr.o pexntb_svc.o
+PSXNTB_OBJS=	psxntb.o psxntb_cfg.o psxntb_intr.o psxntb_svc.o

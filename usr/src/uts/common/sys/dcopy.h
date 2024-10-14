@@ -21,7 +21,7 @@
 
 /*
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
- * Use is subject to license terms.
+ * Copyright 2021 Tintri by DDN. All rights reserved.
  */
 
 #ifndef _SYS_DCOPY_H
@@ -32,6 +32,8 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
+#include <sys/dditypes.h>
+#include <sys/lgrp.h>
 
 /*
  * *** This interface is for private use by the IP stack only ***
@@ -47,6 +49,7 @@ extern void uioa_dcopy_disable();
 #define	DCOPY_NORESOURCES	(1) /* _alloc & _cmd_alloc, _cmd_post only */
 #define	DCOPY_PENDING		(0x10) /* dcopy_poll(), dcopy_unregister() */
 #define	DCOPY_COMPLETED		(0x20) /* dcopy_poll() only */
+#define	DCOPY_TIMEDOUT		(0x40) /* dcopy_poll() timedout */
 
 
 /* dq_version */
@@ -70,14 +73,20 @@ typedef struct dcopy_channel_s *dcopy_handle_t;
 #define	DCOPY_SLEEP	(0)
 #define	DCOPY_NOSLEEP	(1 << 0)
 
+#define	DCOPY_EXCLUSIVE	(1 << 1)	/* request channel for exclusive use */
+
+#define	DCOPY_ANY_ROOT	NULL
+
 /*
  * dcopy_alloc()
  *   Allocate a DMA channel which is used for posting DMA requests. Note: this
  *   does not give the caller exclusive access to the DMA engine. Commands
  *   posted to a channel will complete in order.
  *     flags - (DCOPY_SLEEP, DCOPY_NOSLEEP)
+ *     lgrp - select a channel belonging to this lgrp.
  *     returns => DCOPY_FAILURE, DCOPY_SUCCESS, DCOPY_NORESOURCES
  */
+//int dcopy_alloc(int flags, lgrp_id_t lgrp, dcopy_handle_t *handle);
 int dcopy_alloc(int flags, dcopy_handle_t *handle);
 
 /*
@@ -110,6 +119,9 @@ typedef struct dcopy_query_channel_s {
 
 	/* DMA channel number within the device. Not unique across devices */
 	uint64_t	qc_chan_num;
+
+	/* Locality group this channel is a member of. */
+	lgrp_id_t	qc_lgrp;
 } dcopy_query_channel_t;
 
 /*
@@ -154,6 +166,10 @@ void dcopy_query_channel(dcopy_handle_t handle, dcopy_query_channel_t *query);
  *    Disable destination cache snooping.
  * DCOPY_CMD_LOOP
  *    For CBv1, generate a loop descriptor list, used to support FIPE driver.
+ * DCOPY_CMD_CONTIG_MEM
+ *    The source and destination are known to be in contiguous physical
+ *    pages, thus the ioat engine does not need to split the request into
+ *    page size descriptors.
  * DCOPY_CMD_SYNC
  *    Reserved for internal use.
  */
@@ -166,6 +182,7 @@ void dcopy_query_channel(dcopy_handle_t handle, dcopy_query_channel_t *query);
 #define	DCOPY_CMD_NOSRCSNP	(1 << 5)
 #define	DCOPY_CMD_NODSTSNP	(1 << 6)
 #define	DCOPY_CMD_LOOP		(1 << 7)
+#define	DCOPY_CMD_CONTIG_MEM	(1 << 8)
 #define	DCOPY_CMD_SYNC		(1 << 30)
 
 typedef struct dcopy_cmd_copy_s {
@@ -190,6 +207,16 @@ struct dcopy_cmd_s {
 };
 typedef struct dcopy_cmd_s *dcopy_cmd_t;
 
+/*
+ * dcopy_cmd_init() should be called to initialise private state in the
+ * dcop_cmd_s struct. Eg fron a constructor.
+ */
+void dcopy_cmd_init(dcopy_cmd_t);
+
+/*
+ * dcopy_cmd_fini() is the converse of dcopy_cmd_init()
+ */
+void dcopy_cmd_fini(dcopy_cmd_t);
 
 /*
  * dcopy_cmd_alloc() specific flags
@@ -244,6 +271,11 @@ int dcopy_cmd_post(dcopy_cmd_t cmd);
  */
 int dcopy_cmd_poll(dcopy_cmd_t cmd, int flags);
 
+/*
+ * Use dcopy services to copy from src kva to dst kva, for length len.
+ * hdl is optional, and one will be allocated if not provided.
+ */
+int dcopy(caddr_t src, caddr_t dst, size_t len, dcopy_handle_t hdl);
 
 #ifdef __cplusplus
 }

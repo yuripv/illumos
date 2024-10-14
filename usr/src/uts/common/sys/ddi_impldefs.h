@@ -913,6 +913,7 @@ typedef struct ddi_dma_impl {
 	uint_t		dmai_ncookies;
 	uint_t		dmai_curcookie;
 	void		*dmai_private;
+	void		*dmai_driver_private;
 
 	/*
 	 * Information gathered from the original dma mapping

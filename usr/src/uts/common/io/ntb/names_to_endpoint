@@ -1,0 +1,31 @@
+# This file contains a list of endpoint names and the endpoint ids
+# to which they are mapped.
+#
+# It allows drivers to reference endpoints by name and provides a central
+# collection of endpoint ids. This file should be the same on both
+# systems on either side of the bridge.
+#
+# Each line is a single entry, the first portion is the text string
+# to be referenced by the driver, followed by white space(s) and then
+# the integer endpoint id. Currently, the range of valid endpoints ids is
+# 0 <= id <= 255.
+#
+# For example:
+#	checksum-test		254		Used for integrity tests
+#	performance-test	255		Used by throughput tests
+
+# Reserve a range for use by drivers which may cause critical failures
+# should this file not be present. E.g. entb driver will use endpoint_ids
+# which correspond to its instance number.
+
+entb0		0	Do not change
+entb1		1	Do not change
+reserved-2	2
+reserved-3	3
+reserved-4	4
+reserved-5	5
+reserved-6	6
+reserved-7	7
+nvrd		8
+pram_ctl	9
+pram_data	10
