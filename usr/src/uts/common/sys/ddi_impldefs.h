@@ -930,6 +930,7 @@ typedef struct ddi_dma_impl {
 	void		(*dmai_fault_notify)(struct ddi_dma_impl *handle);
 	int		dmai_fault;
 	ndi_err_t	dmai_error;
+	void		*dmai_driver_private;
 } ddi_dma_impl_t;
 
 #else

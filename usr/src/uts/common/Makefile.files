@@ -2360,3 +2360,9 @@ KTEST_OBJS += ktest.o
 MAC_TEST_OBJS += mac_test.o
 KTEST_SELFTEST_OBJS += ktest_selftest.o
 STREAM_TEST_OBJS += stream_test.o
+
+# NTB
+NTB_OBJS=	ntb.o
+NTB_TRANS_OBJS=	ntb_transport.o
+NTB_HW_PSX_OBJS= ntb_hw_psx.o
+ENTB_OBJS=	entb_main.o entb_plx.o entb_rx.o entb_tx.o entb_transport.o

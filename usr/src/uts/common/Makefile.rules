@@ -1727,3 +1727,15 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/tpm/%.S
 $(OBJS_DIR)/bz2%.o:		$(COMMONBASE)/bzip2/%.c
 	$(COMPILE.c) -o $@ -I$(COMMONBASE)/bzip2 $<
 	$(CTFCONVERT_O)
+
+$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/ntb/%.c
+	$(COMPILE.c) -o $@ $<
+	$(CTFCONVERT_O)
+
+$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/ntb/ntb_hw/%.c
+	$(COMPILE.c) -o $@ $<
+	$(CTFCONVERT_O)
+
+$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/ntb/entb/%.c
+	$(COMPILE.c) -o $@ $<
+	$(CTFCONVERT_O)
